@@ -1,0 +1,1119 @@
+Chapter 3 NumPyの数学関数を使う
+----------------------------------------
+3.1 NumPyの数学関数・定数のまとめ
+----------------------------------------
+3.1.1 四則演算
+----------------------------------------
+In [1]:import numpy as np
+
+In [2]:a = np.array([0, 1, 2, 3, 4])
+
+In [3]:b = np.array([2, 4, 6, 8, 10])
+
+In [4]:a + b # 配列同士を足し合わせると各々の要素の和が返ってくる
+
+In [5]:a + 4 # 各要素に4を足す
+
+In [6]:np.add(a ,b) # 関数を使って同様の計算ができる
+
+In [7]:np.add(a, 4)
+
+In [8]:a - b # 先ほど作ったa、bを用いる
+
+In [9]:b - a
+
+In [10]:a - 4 # 各々の要素から4ずつ引く
+
+In [11]:np.subtract(a, b) # 引き算も関数を使うことが可能
+
+In [12]:np.subtract(a, 4)
+
+In [13]:a * b
+
+In [14]:a * 2
+
+In [15]:np.multiply(a, b)
+
+In [16]:np.multiply(a, 2)
+
+In [17]:b / a # b÷aを行うが、aの要素の中に0が含まれているので1つだけ無限を表すinfになっている※ 1
+
+In [18]:b / 2 # 2で割ってみる
+
+In [19]:b / 3 # 3で割ってみる
+
+In [20]:np.divide(b, a) # 関数でも同じことを行える
+
+In [21]:np.divide(b, 2)
+
+In [22]:b // 3
+
+In [23]:b % 3
+
+In [24]: np.mod(b, 3) # 3で割った余り
+
+
+3.1.2 累乗（np.power）・平方根（np.sqrt）
+----------------------------------------
+In [25]:np.power(2, 3) # 2の3乗の値を求める
+
+In [26]:2**3 # これはPythonの累乗計算
+
+In [27]:a = np.arange(1, 11, 1)
+
+In [28]:b = np.array([1, 2, 1, 2, 1, 2, 1, 2, 1, 2])
+
+In [29]:a
+
+In [30]:b
+
+In [31]:np.power(a, b) # 1乗、2乗の値が交互に出る
+
+In [32]:a ** b # 同様に
+
+In [33]:np.sqrt(2) # 平方根はnp.sqrtを使う
+
+In [34]:2 ** 0.5 # もちろん、関数を使わないで平方根を求めることもできる
+
+In [35]:np.sqrt(a) # もちろん、配列を入れることも可能
+
+3.1.3 三角関数
+----------------------------------------
+In [36]:np.sin(0)
+
+In [37]:np.cos(0)
+
+In [38]:np.tan(0)
+
+In [39]:np.sin(np.pi*0.5) # π/2の時のサインの値は1
+
+In [40]:np.cos(np.pi*0.5) # 0になるはず
+
+In [41]:np.tan(np.pi*0.5) # 無限に発散する
+
+In [42]:np.sin(1)
+
+In [43]:np.cos(1)
+
+In [44]:np.tan(1)
+
+In [45]:np.arcsin(0.5)
+
+In [46]:np.arccos(0.5)
+
+In [47]:np.arctan(1.0)
+
+In [48]:np.arcsin(-1.0)
+
+In [49]:np.arccos(-1.0)
+
+In [50]:np.arctan(-0.5)
+
+In [51]:np.radians(120)
+
+In [52]:np.deg2rad(120)
+
+In [53]:np.rad2deg(3.14)
+
+In [54]:np.deg2rad(np.rad2deg(2.3))
+
+In [55]:%timeit np.radians(24)
+
+In [56]:%timeit np.deg2rad(24)
+
+3.1.4 指数関数、対数関数
+----------------------------------------
+In [57]:np.exp(1) # 1乗
+
+In [58]:np.exp(2)
+
+In [59]:np.exp(0)
+
+In [60]:np.log(np.e) # np.eでネイピア数e
+
+In [61]:a = np.array([1., 2., np.e**2, 10])
+
+In [62]:np.log(a) # 配列を指定することもできる（他の数学関数も同様)
+
+In [63]:b = np.array([1., 2., 4., 7])
+
+In [64]:np.log2(b)
+
+In [65]:c = np.array([1., 10., 20., 100])
+
+In [66]:np.log10(c)
+
+In [67]:np.log1p(a)
+
+In [68]:np.log(2)/np.log(4) # log4(2)がこの記述でできる（4が底）
+
+In [69]:np.log(9)/np.log(3) # log3(9)（3が底）
+
+3.1.5 双曲線関数（hyperbolic）
+----------------------------------------
+In [70]:np.sinh(2)
+
+In [71]:np.cosh(2)
+
+In [72]:np.tanh(2)
+
+In [73]:np.sinh(-1)
+
+In [74]:np.cosh(-1)
+
+In [75]:np.tanh(-1)
+
+In [76]:np.arcsinh(2)
+
+In [77]:np.arccosh(1)
+
+In [78]:np.arctanh(0.7)
+
+3.1.6 切り捨て、切り上げ、四捨五入
+----------------------------------------
+In [79]:a = np.array([-1.8, -1.4, -1.0, -0.6, -0.2, 0., 0.2, 0.6, 1.0, 1.4, 1.8])
+In [80]:np.floor(a) # 切り捨て(値が小さいほうの整数にする)
+
+In [81]:np.trunc(a) # 切り捨て(小数部分を切り捨てる)
+
+In [82]:np.ceil(a) # 切り上げ（大きいほうの整数にする)
+
+In [83]:np.round(a) # 四捨五入
+
+In [84]:np.around(a) # 四捨五入
+
+In [85]:np.rint(a) # 四捨五入
+
+In [86]:np.fix(a) # 0に近い方向の整数をとる
+
+3.1.7 複素数
+----------------------------------------
+In [87]:a = 1 + 2j # 1 + 2iの複素数
+
+In [88]:b = -2 + 1j # -2 + iの複素数。1を忘れないようにする
+
+In [89]:np.real(a) # aの実部は1
+
+In [90]:np.imag(a) # aの虚部は2
+
+In [91]:a+b # 複素数の計算と同じように、実部同士、虚部同士を足し合わせる
+
+In [92]:a*b
+
+In [93]:a/b
+
+In [94]:np.conj(a) # 複素共役を返す
+
+3.1.8 絶対値
+----------------------------------------
+In [95]:a = -2.5
+
+In [96]:np.absolute(a)
+
+In [97]:np.fabs(a)
+
+In [98]:b = -2 + 3j # 複素数で計算してみる
+
+In [99]:np.abs(b) # np.absはnp.absoluteの略記
+
+In [100]:np.fabs(b) # np.fabsでは、複素数の絶対値を計算することができない
+
+In [101]:c = np.array([-1, 2, -8, 12, 1+2j])
+
+In [102]:np.abs(c) # 各々の要素の絶対値が返ってくる
+
+3.1.9 数学的な定数の呼び出し
+----------------------------------------
+In [103]:np.e
+
+In [104]:np.pi
+
+3.2 要素の平均を求めるaverageとmean
+----------------------------------------
+3.2.1 np.average
+----------------------------------------
+In [1]:import numpy as np
+
+In [2]:a = np.array([33, 44, 54, 23, 25, 55, 32, 76]) # 適当な配列を1つ作る
+
+In [3]:np.average(a) # まずはaの平均を求める
+
+In [4]:a = a.reshape(2, 4) # aのshapeを変更する
+
+In [5]:a
+
+In [6]:np.average(a) # aのshapeに関わらず、引数にaxisが指定されていなければ1つのスカラー量だけ返される
+
+In [7]:np.average(a, axis=0) # 軸(axis)を指定する。2次元配列でaxis=0の時は行方向の平均を求める
+
+In [8]:np.average(a, axis=1) # axis = 1の時は列方向の平均を求める
+
+In [9]:b = np.random.rand(24).reshape(2, 3, 4) # 3次元の配列でも確かめておく
+
+In [10]:b
+
+In [11]:np.average(b, axis=0) # 大きく2つに分かれた配列の2つの要素の平均をそれぞれ求める
+
+In [12]:np.average(b, axis=1) # 行方向の平均をとる
+
+In [13]:np.average(b, axis=2) # 列方向の平均をとる
+
+In [14]:a = a.flatten() # aを1次元配列に変形する
+
+In [15]:w = np.array([0.1, 0.05, 0.2, 0.0, 0.0, 0.4, 0.2, 0.05]) # 重みを設定する
+In [16]:np.average(a, weights=w) # 重み付きの平均を求める
+
+In [17]:w2 = np.array([0.2, 0.8])
+
+In [18]:a = a.reshape(2, 4) # またaのshapeを変更する
+
+In [19]:np.average(a, axis=0, weights=w2) # 指定した軸方向の要素数が一致しており、かつ重みの配列が1次元配列である時、ブロードキャストが適用される
+
+In [20]:np.average(a, returned="True") # 重みを設定しないと、各々の要素の重みが1.0に設定されるので、重みの合計は要素数と一致する
+
+In [21]:a = a.flatten() # aを1次元配列に変形する
+
+In [22]:a
+
+In [23]:w
+
+In [24]:np.average(a, weights=w, returned="True") # この状態で実行すれば、平均、重さの合計が表示される
+
+3.2.3 np.ndarray.mean
+----------------------------------------
+In [25]:np.random.seed(1)
+
+In [26]:a = np.random.randint(0, 10, 20) # 0～9までのランダムな整数を20個生成する
+
+In [27]:a
+
+In [28]:np.mean(a) # 平均を求める
+
+In [29]:a.mean() # np.ndarray.meanの形でも求められる
+
+In [30]:b = a.reshape(4, 5) # aを4×5の2次元配列に変形したものをbに代入する
+
+In [31]:b
+
+In [32]:np.mean(b) # shapeを変更しても結果は変わらない
+
+In [33]:b.mean()
+
+In [34]:np.mean(b, axis=0) # 行方向、つまり列ごとの平均を求めていく
+
+In [35]:np.mean(b, axis=1) # 列方向、つまり行ごとの平均を求めていく
+
+In [36]:c = np.random.rand(24).reshape((2, 3, 4)) # 3次元配列でも試していく
+
+In [37]:c # 次は0~1の範囲で乱数を24個生成する
+
+In [38]:np.mean(c, axis=0) # 軸（axis）が3つある配列でのaxis=0は2つに分かれた配列方向のもの。この場合、2つの配列の相当する要素における平均をそれぞれ求めている
+
+In [39]:np.mean(c, axis=1) # これが軸が2つある状態での行方向、つまり列ごとの平均を求めるもの
+
+In [40]:np.mean(c, axis=2) # これが軸が2つある状態での列方向、つまり行ごとの平均を求めるもの
+
+In [41]:d = np.random.rand(1000) # 乱数を1,000個生成する
+
+In [42]:d.dtype # dtypeを確認する
+
+In [43]:np.mean(d) # まずは何もdtypeを指定しない状態で平均を計算する
+
+In [44]:np.mean(d, dtype="float32") # ビット数を半分にしてもう一度計算してみる
+
+In [45]:np.mean(d, dtype="float16") # さらに半分のビット数にするともっと少なくなる
+
+In [46]:b # 2次元配列のbを使用する
+
+In [47]:e = np.mean(b, keepdims=True) # 次元を減らさない
+
+In [48]:e
+
+In [49]:e.shape
+
+In [50]:f = np.mean(b, keepdims=False)
+
+In [51]:f
+
+In [52]:g = np.mean(b, axis=1, keepdims=True)
+
+In [53]:g
+
+In [54]:g.shape
+
+In [55]:h = np.mean(b, axis=1, keepdims=False)
+
+In [56]:h
+
+In [57]:h.shape
+
+3.3 要素の中央値を計算するmedian
+----------------------------------------
+3.3.2 np.median
+----------------------------------------
+In [1]:import numpy as np # numpyモジュールのインポート
+
+In [2]:a = np.random.randint(100, size=(2, 3, 4)) # 2×3×4の3次元乱数配列を生成する
+
+In [3]:a # 配列の中身を確認する
+
+In [4]:np.median(a) # すべての要素を対象にして中央値を求める
+
+In [5]:np.median(a, axis=2) # axis=2の軸方向に沿った中央値を求めていく
+
+In [6]:np.median(a, axis=1) # axis=1にする
+
+In [7]:np.median(a, axis=(1, 2)) # axisを2つ指定すると2次元の中での中央値を出してくれる
+
+In [8]:b = a.copy()
+
+In [9]:b
+
+In [10]:np.median(b, axis=1, overwrite_input=True)
+
+In [11]:np.all(a==b) # aとbのすべての要素が合致しているかを調べる
+
+In [12]:a
+
+In [13]:b # aとは違った並び方になっている。破壊的操作が行われた証拠である
+
+In [14]:b = a.copy()
+
+In [15]:%timeit np.median(a, axis=1)
+
+In [16]:%timeit np.median(b, axis=1, overwrite_input=True)
+
+In [17]:c = np.random.randn(10000) # 大きい配列で比べる
+
+In [18]:%timeit np.median(a)
+
+In [19]:d= c.copy()
+
+In [20]:%timeit np.median(b, overwrite_input=True)
+
+In [21]:np.median(a, axis=0, keepdims=True) # 3次元配列が出力される
+
+In [22]:np.median(a, axis=1, keepdims=False) # axis=1でTrueの場合とFalseの場合とを見比べる
+
+In [23]:np.median(a, axis=1, keepdims=True)
+
+In [24]:np.median(a, axis=(0, 2), keepdims=True)
+
+3.4 要素の和を求めるsum
+----------------------------------------
+3.4.1 np.sum
+----------------------------------------
+In [1]:import numpy as np # numpyモジュールのインポート
+
+In [2]:a = np.random.randint(0, 10, size=(2,5))
+
+In [3]:a # 2×5の0～9における乱数配列
+
+In [4]:np.sum(a) # すべての要素の和を求める
+
+In [5]:b = np.array([2, 4, 1, 6]) # 1次元配列でももちろんできる
+
+In [6]:np.sum(b)
+
+In [7]:c = np.random.randint(0, 10, size=(2, 4, 5)) # 3次元配列でも試してみる
+
+In [8]:c
+
+In [9]:np.sum(c)
+
+In [10]:a # 先ほどと同じ2次元配列を用いる
+
+In [11]:np.sum(a, axis=0) # 行方向に足し合わせる
+
+In [12]:np.sum(a, axis=1) # 列方向に足し合わせる
+
+In [13]:c # 3次元配列を求める
+
+In [14]:np.sum(c, axis=0)
+
+In [15]:np.sum(c, axis=1)
+
+In [16]:np.sum(c, axis=2)
+
+In [17]:np.sum(c, axis=0, keepdims=True) # keepdims=Trueにすると3次元配列が出力される
+
+In [18]:np.sum(c, axis=1, keepdims=True)
+
+In [19]:np.sum(c, axis=2, keepdims=True)
+
+In [20]:np.sum(a, dtype='int8') # データ型をint8にする
+
+In [21]:np.sum(a, axis=0, dtype='float') # データ型をfloatにする
+
+3.4.2 np.ndarray.sum
+----------------------------------------
+In [22]:a # 先ほどと同じ配列を使い回す
+
+In [23]:b
+
+In [24]:c
+
+In [25]:a.sum() # まずは単純な和から計算する
+
+In [26]:b.sum()
+
+In [27]:c.sum()
+
+In [28]:a.sum(axis=0) # axisを指定する
+
+In [29]:c.sum(axis=0)
+
+In [30]:c.sum(axis=2)
+
+In [31]:a.sum(axis=0, keepdims=True) # keepdims=Trueにする
+
+In [32]:c.sum(axis=2, keepdims=True)
+
+In [33]:a.sum(axis=0, dtype='float') # dtypeを指定する
+
+3.5 標準偏差を計算するstd
+----------------------------------------
+3.5.2 np.std
+----------------------------------------
+In [1]:import numpy as np
+
+In [2]:a = np.random.rand(10) # まずは乱数配列を作る
+
+In [3]:a # 中身を確かめる
+
+In [4]:np.std(a) # 標準偏差を求める
+
+In [5]:b = np.random.rand(2, 3, 4) # ここでは3次元配列を生成す
+る
+In [6]:b
+
+In [7]:np.std(b, axis=0) # axis=0方向に沿って標準偏差を求める。結果は3×4の2次元配列
+
+In [8]:np.std(b, axis=(0, 1)) # axisを2つ指定すると、この2つの軸方向に広がる平面内における標準偏差を求めてくれる
+
+In [9]:np.std(b, axis=(0, 1, 2))
+
+In [10]:np.std(b, dtype='float16')
+
+In [11]:np.std(b, dtype='complex')
+
+In [12]:c = np.empty((2, 3)) # 受け皿となる配列を用意する(np.emptyをここでは使用)
+
+In [13]:np.std(b, axis=2, out=c) # outでcを指定する
+
+In [14]:c # cに値がきちんと格納されている
+
+In [15]:np.std(b) # 元の値(ddof=0)をまず表示する
+
+In [16]:np.std(b, ddof=1) # 次にddof=1にして不偏標準偏差を表示させる
+
+In [17]:np.std(b, keepdims=True) # keepdims=Trueにすると3次元配列が返される
+
+In [18]:np.std(b, axis=0, keepdims=True) # axisを指定する
+
+In [19]:b / np.std(b, axis=0, keepdims=True) # このようにブロードキャストが適用できる
+
+In [20]:b / np.std(b, axis=0, keepdims=False) # Falseにしてもうまくいく場合がある
+
+In [21]:b / np.std(b, axis=1, keepdims=False) # axisを他のものにするとエラーが返ってくることがある
+
+3.6 分散を求めるvar
+----------------------------------------
+3.6.2 np.var
+----------------------------------------
+In [1]:import numpy as np
+
+In [2]:a = np.array([10, 20, 12, 0, 3, 5])
+
+In [3]:np.var(a) # 特に引数を指定しない場合は6つのデータから分散を求める
+
+In [4]:b = np.random.randint(20, size=(3,4))
+
+In [5]:b # bの中身を確認する
+
+In [6]:np.var(b) # 特にaxisを指定しないと全体の分散を求める
+
+In [7]:np.var(b, axis=0) # 行ごとの分散を求める
+
+
+In [8]:np.var(b, axis=1) # 列ごとの分散を求める
+
+In [9]:np.var(b, axis=(0, 1)) # 左のように記述することで、0、1番目の軸方向で計算を行い、すべての範囲の分散を求めることができる
+
+In [10]:c = np.random.randn(100).reshape(5, 20) # 標準正規分布からランダムな数列を生成する
+
+In [11]:c.dtype # データ型を確認する
+
+In [12]:c
+
+In [13]:np.var(c, dtype='float32') # dtypeを指定する
+
+In [14]:np.var(c, dtype='float64')
+
+In [15]:d = np.random.randn(10) # 10個のサンプルデータから計算してみる
+
+In [16]:d
+
+In [17]:np.var(d, ddof=0) # まずはデフォルトの値であるddof=0から（標本分散を）計算する
+
+In [18]:np.var(d, ddof=1) # 次は不偏分散を求める
+
+In [19]:e = np.random.randn(5) # もっとサンプル数を減らしてみる
+
+In [20]:e
+
+In [21]:np.var(e)
+
+In [22]:np.var(e, ddof=1) # 1により近づく
+
+In [23]:f = np.random.randint(20, size=(2, 5, 10)) # 3次元のランダム配列
+
+In [24]:f
+
+In [25]:f_var = np.var(f, axis=1) # それぞれの行ごとの分散を求める
+
+In [26]:f/f_var # これだとブロードキャストがうまく適用されない
+
+In [27]:f_var.shape # shapeを確認してみる
+
+In [28]:f_var = np.var(f, axis=1, keepdims=True)
+
+In [29]:f/f_var # keepdimsをTrueにするとうまく計算できる
+
+3.7 共分散を求めるcov
+----------------------------------------
+3.7.1 共分散
+----------------------------------------
+In [1]:import numpy as np
+
+In [2]:import matplotlib.pyplot as plt
+
+In [3]:mean = np.array([0, 0]) # 平均を指定する
+
+In [4]:cov = np.array([
+...:[1, 0.1],
+...:[0.1, 1]]) # 共分散行列を指定。0.1のところを変えればxとyの共分散の値を変えられる
+
+------------------
+In [4]:利用しやすいテキスト
+------------------
+cov = np.array([
+[1, 0.1],
+[0.1, 1]]) # 共分散行列を指定。0.1のところを変えればxとyの共分散の値を変えられ
+------------------
+
+In [5]:x, y = np.random.multivariate_normal(mean, cov, 5000).T # とりあえず5,000個生成する
+
+In [6]:plt.plot(x, y, 'x') # プロットする
+
+In [7]:plt.title("covariance=0.1")
+
+In [8]:plt.axis("equal")
+
+In [9]:plt.show()
+
+In [10]:a = np.array([[10, 5, 2, 4, 9, 3, 2],[10, 2, 8, 3, 7, 4, 1]]) # 1行目を各生徒の数学の点数、2行目を各生徒の国語の点数(それぞれ10点満点)としている
+
+In [11]:np.cov(a) # まずは引数だけ指定する
+
+In [12]:c = np.array([3, 2, 1, 5, 7, 2, 1]) # 今度は英語の点数を追加する
+
+In [13]:np.cov(a,c) # 数学、国語、英語の共分散行列が返される
+
+In [14]:a_transpose = a.T # 列と行を入れ替える
+
+In [15]:c_transpose = np.reshape(c, (-1, 1))
+
+In [16]:np.cov(a_transpose, y=c_transpose, rowvar=False)
+
+In [18]:np.cov(a, bias=True) # Nで割るので値が少しずつ減少する
+
+In [19]:np.cov(a, ddof=None)
+
+In [20]:np.cov(a, ddof=0)
+
+In [21]:np.cov(a, ddof=1)
+
+In [22]:np.cov(a, ddof=2)
+
+In [23]:a
+
+In [24]:fweights = np.array([1, 2, 2, 1, 1, 1, 1]) # 左から2、3番目の生徒の点数を重要視する
+
+In [25]:np.cov(a, fweights=fweights)
+
+In [26]:aweights= np.array([0.1, 0.2, 0.2, 0.2, 0.1, 0.1, 0.1]) # 2、3、4番目の生徒の点数を重視する
+
+In [27]:np.cov(a, aweights=None)
+
+In [28]:np.cov(a, aweights=aweights)
+
+3.8 相関係数を求めるcorrcoef
+----------------------------------------
+3.8.2 定義
+----------------------------------------
+In [1]:import numpy as np
+
+In [2]:import matplotlib.pyplot as plt
+
+In [3]:mean = np.array([0, 0]) # 平均を指定する
+
+In [4]:cov = np.array([
+...:[1, 0.8],
+...:[0.8, 1]]) # 共分散行列を指定。2つの0.8の箇所を好きなrの値に変えればxとyの共分散の値を変えられる
+
+------------------
+In [4]:利用しやすいテキスト
+------------------
+cov = np.array([
+[1, 0.8],
+[0.8, 1]]) # 共分散行列を指定。2つの0.8の箇所を好きなrの値に変えればxとyの共分散の値を変えられる
+------------------
+
+In [5]:x, y = np.random.multivariate_normal(mean, cov, 5000).T # とりあえず5,000個生成する
+
+In [6]:plt.plot(x, y, 'x') # プロットする。'x'はプロットのスタイルを指定。×印がプロットされる
+
+In [7]:plt.title("r=0.8")
+
+In [8]:plt.axis("equal") # それぞれのメモリの幅を一致させる
+
+In [9]:plt.show()
+
+3.8.3 np.corrcoef
+----------------------------------------
+In [10]:import numpy as np
+
+In [11]:x = np.array([
+...:[1, 2, 1, 9, 10, 3, 2, 6, 7],
+...:[2, 1, 8, 3, 7, 5, 10, 7, 2]]) # 1行目が数学、2行目が国語の成績
+
+------------------
+In [11]:利用しやすいテキスト
+------------------
+x = np.array([
+[1, 2, 1, 9, 10, 3, 2, 6, 7],
+[2, 1, 8, 3, 7, 5, 10, 7, 2]]) # 1行目が数学、2行目が国語の成績
+------------------
+
+In [12]:np.corrcoef(x) # 相関行列を求める。 右上と左下の値が相関係数となっている
+
+In [13]:y = np.array([2, 1, 1, 8, 9, 4, 3, 5, 7]) # 英語の成績を追加する
+
+In [14]:np.corrcoef(x, y) # 第2引数としてyを入れることで3つの科目の成績をわざわざ結合しなくても相関係数を求めることが可能になる
+
+In [15]:x_transpose = x.T
+
+In [16]:np.corrcoef(x_transpose, rowvar=False) # rowvar=Falseにすることで列ごとに相関係数を求める
+
+In [17]:np.corrcoef(x_transpose, rowvar=True) # rowvar=True(デフォルト)のままにすると生徒ごとの相関係数を求めることになる
+
+3.9 配列の要素から格子列を生成するmeshgrid
+----------------------------------------
+3.9.1 格子点
+----------------------------------------
+In [1]:import numpy as np
+
+In [2]:xx = np.array([[x for x in range(5)] for _ in range(5)])
+
+In [3]:xx
+
+In [4]:yy = np.array([[y for _ in range(5)] for y in range(5)])
+
+In [5]:yy
+
+3.9.2 np.meshgrid
+----------------------------------------
+In [6]:import numpy as np
+
+In [7]:a = np.array([0, 1, 2])
+
+In [8]:b = np.array([0, 4]) # まずは2つの1次元配列を2つ作る
+
+In [9]:aa, bb = np.meshgrid(a, b) # 基本的な操作から行う
+
+In [10]:aa
+
+In [11]:bb
+
+In [12]:c = np.array([0, 9]) # 新たにもう1つ追加する
+
+In [13]:aaa, bbb, ccc = np.meshgrid(a, b, c) # 3つの軸を持つ配列が3つ生成される
+In [14]:aaa
+
+In [15]:bbb
+
+In [16]:ccc
+
+In [17]:aa2, bb2 = np.meshgrid(a, b, indexing='xy') # まずはデフォルトの値である'xy'から行う
+
+In [18]:aa2
+
+In [19]:bb2
+
+In [20]:aa3, bb3 = np.meshgrid(a, b, indexing='ij') # 'ij'にしてみる
+
+In [21]:aa3
+
+In [22]:bb3
+
+In [23]:aaa1, bbb1, ccc1 = np.meshgrid(a, b, c, indexing='xy') # 3次元の場合でも同様のことを確かめてみる
+
+In [24]:aaa1
+
+In [25]:bbb1
+
+In [26]:ccc1
+
+In [27]:aaa2, bbb2, ccc2=np.meshgrid(a, b, c, indexing='ij') # 'ij'にする
+
+In [28]:aaa2
+
+In [29]:bbb2
+
+In [30]:ccc2
+
+In [31]:av, bv=np.meshgrid(a, b, sparse=True) # ベクトルが作られるのでav、bvのようにvの添字を付けるのが一般的である
+
+In [32]:av
+
+In [33]:bv
+
+In [34]:aav, bbv, ccv=np.meshgrid(a, b, c, sparse=True) # ３次元でも同様のことができる
+
+In [35]:aav
+
+In [36]:bbv
+
+In [37]:ccv
+
+3.10 内積を計算するdot
+----------------------------------------
+3.10.3 np.dot
+----------------------------------------
+In [1]:import numpy as np
+
+In [2]:a = np.array([1, 2])
+
+In [3]:b = np.array([4, 3])
+
+In [4]:np.dot(a, b) # まずは2次元ベクトル同士の内積から計算する
+
+In [5]:np.dot(a, a) # これでベクトルのノルムの2乗が計算結果として表示される
+
+In [6]:np.dot(4, 5) # ただの数字を入れてもその積が返される
+
+In [7]:c = np.array([1j, 2j]) # 複素数で計算する
+
+In [8]:d = np.array([4j, 3j])
+
+In [9]:np.dot(c, d)
+
+In [10]:np.dot(a, d)
+
+In [11]:e = np.matrix([1, 2])
+
+In [12]:f = np.matrix([4, 3])
+
+In [13]:np.dot(e, f) # np.matrixで同じように計算しようとするとエラーが返ってくる
+
+In [14]:f = np.matrix([[4], [3]]) # fを列ベクトルに変換すれば
+
+In [15]:np.dot(e, f) # 同じ結果を得ることができる
+
+In [16]:a = np.array([[1, 2], [3, 4]])
+
+In [17]:b = np.array([[4, 3], [2, 1]])
+
+In [18]:np.dot(a, b) # 2×2の行列同士の積を計算する
+
+In [19]:np.dot(b, a) # aとbの順番を入れ替えると返ってくる行列も違ってくる
+
+In [20]:c = np.arange(9).reshape((3, 3))
+
+In [21]:d = np.ones((3, 3)) # 要素が1の3×3の配列を生成する
+
+In [22]:np.dot(c, d) # 3×3の行列同士でももちろん計算できる
+
+In [23]:a = np.arange(12).reshape((4, 3))
+
+In [24]:b = np.arange(16).reshape((4, 4))
+
+In [25]:np.dot(a, b) # aのaxis=1とbのaxis=0が異なると演算ができない
+
+In [26]:d = np.matrix([[0, 1, 2], [3, 4, 5], [6, 7, 8]]) # cとdをmatrixに変換したものを作る
+
+In [27]:e = np.matrix([[1, 1, 1], [1, 1, 1], [1, 1, 1]])
+
+In [28]:np.dot(d, e)
+
+In [29]:result = np.zeros((2, 2)) # 受け皿となる配列をあらかじめ作っておく
+
+In [30]:a = np.arange(4).reshape(2, 2)
+
+In [31]:b = np.ones((2, 2))
+
+In [32]:a
+
+In [33]:np.dot(a, b, out=result)
+
+In [34]:result # きちんと代入されているかどうかを確認する
+
+In [35]:np.dot(b, a, out=result) # 入力するaとbの順番を入れ替えると値が変わることも反映されている
+
+3.11 行列式を求めるlinalg.det
+----------------------------------------
+3.11.2 np.linalg.det
+----------------------------------------
+In [1]:import numpy as np
+
+In [2]:import numpy.linalg as LA # linalgモジュールはLAとしてインポートするのが慣例
+
+In [3]:a = np.array([[2, 3], [4, -1]])
+
+In [4]:a
+
+In [5]:LA.det(a) # aの行列式を求める
+
+In [6]:b = np.array([[1, 1], [2, 2]]) # 行列式が0になるものを持ってくる
+
+In [7]:b
+
+In [8]:LA.det(b)
+
+In [9]:c = np.array([[1-1j, 3j], [-3j, 1+2j]]) # 要素が複素数でも問題ない
+
+In [10]:c
+
+In [11]:LA.det(c)
+
+In [12]:d = np.random.randint(-5, 6, size=(3, 3, 3))
+
+In [13]:d
+
+In [14]:LA.det(d)
+
+3.12 行列の固有値や固有ベクトルを求めるlinalg.eig
+----------------------------------------
+3.12.3 np.linalg.eig
+----------------------------------------
+In [1]:import numpy as np
+
+In [2]:import numpy.linalg as LA # linalgモジュールはLAとしてインポートするのが慣例
+
+In [3]:a = np.array([[1, 0], [0, 2]]) # まずはわかりやすい対角行列から計算する
+
+In [4]:a
+
+In [5]:LA.eig(a)
+
+In [6]:b = np.array([[2, 5], [3, -8]]) # 次はこの行列の固有値、固有ベクトルを求める
+
+In [7]:b
+
+In [8]:LA.eig(b)
+
+In [9]:c = np.random.randint(-10, 10, size=(3, 3)) # 3×3の行列で試す
+
+In [10]:w,v = LA.eig(c) # この場合ではwが固有値、vが固有ベクトルに相当する
+
+In [11]:w
+
+In [12]:v
+
+In [13]:c = np.random.randint(-10, 10, size=(3, 3, 3)) # 3×3の行列で試す
+
+In [14]:c
+
+In [15]:w,v = LA.eig(c)
+
+In [16]:w
+
+In [17]:v
+
+3.13 行列の階数（ランク）を求めるrank
+----------------------------------------
+3.13.2 np.linalg.matrix_rank
+----------------------------------------
+In [1]:import numpy as np
+
+In [2]:A = np.array([[1, 1, 4, 0, 1],
+...:[0, 3, 1, 3, 2],
+...:[1, 3, 0, 0, 1],
+...:[2, 4, 3, 1, 1]]) # Aを定義する
+
+------------------
+In [2]:利用しやすいテキスト
+------------------
+A = np.array([[1, 1, 4, 0, 1],
+[0, 3, 1, 3, 2],
+[1, 3, 0, 0, 1],
+[2, 4, 3, 1, 1]]) # Aを定義する
+------------------
+
+In [3]:np.linalg.matrix_rank(A) # 階数(rank)を確かめる
+
+In [4]:B = np.array([
+...:[1, 2, 3, 0],
+...:[2, 4, 6, 0],
+...:[1, 0, 1, 2],
+...:[1, 0, 0, 3]]) # 1行目と2行目の値の比を等しくする
+
+------------------
+In [2]:利用しやすいテキスト
+------------------
+B = np.array([
+[1, 2, 3, 0],
+[2, 4, 6, 0],
+[1, 0, 1, 2],
+[1, 0, 0, 3]]) # 1行目と2行目の値の比を等しくする
+------------------
+
+In [5]:np.linalg.matrix_rank(B) # 階数を計算する
+
+3.14 逆行列を求めるinv
+----------------------------------------
+3.14.3 np.linalg.inv
+----------------------------------------
+In [1]:import numpy as np
+
+In [2]:a = np.random.randint(-9, 10, size=(2, 2)) # まずは2×2の行列から計算する
+
+In [3]:a
+
+In [4]:np.linalg.inv(a) # 逆行列を求める
+
+In [5]:np.dot(a, np.linalg.inv(a)) # 積をとり単位行列となるかどうか確かめる
+
+In [6]:b = np.random.randint(-10, 10, size=(3, 3)) # 次は3×3の行列を計算する
+
+In [7]:b
+
+In [8]:c = np.linalg.inv(b)
+
+In [9]:c
+
+In [10]:np.dot(b, c) # 積を計算する
+
+In [11]:np.dot(c, b) # 逆順にしても計算結果はほとんど変わらない（対角成分以外の値は大きさがほぼゼロの値になっているため。e-17は10の17乗オーダーという意味合いになる)
+
+In [12]:d = np.random.randint(-10, 10, size=(4, 3, 3)) # 4つの３×３行列
+
+In [13]:d
+
+In [14]:e = np.linalg.inv(d) # 逆行列を求める
+
+In [15]:e
+
+In [16]:np.dot(d, e) # 積を計算してみる
+
+3.15 直積を求めるouter
+----------------------------------------
+3.15.2 np.outer
+----------------------------------------
+In [1]:import numpy as np
+
+In [2]:a = np.array([1, 2, 3, 2, 1])
+
+In [3]:b = np.array([0, 2, 4, 6, 8, 1]) # 2つの1次元配列を作る
+
+In [4]:np.outer(a, b) # 直積を求める
+
+In [5]:a.shape # それぞれのShapeを確認する
+
+In [6]:b.shape
+
+In [7]:np.outer(a, b) # きちんと(M,N)になっている
+
+In [8]:np.outer(a, b).shape # きちんと(M,N)になっている
+
+In [9]:np.outer(a, b) == a.reshape(-1, 1) * b # ブロードキャストを使って同様の計算もできる
+
+In [10]:b = b.reshape(2, -1)
+
+In [11]:c = np.random.randint(0, 5, size=(2, 4))
+
+In [12]:b
+
+In [13]:c
+
+In [14]:np.outer(b, c)
+
+In [15]:np.outer(b.ravel(), c.ravel()) # 1次元配列に変換したものを指定しても結果は同じである
+
+3.16 外積を求めるcross
+----------------------------------------
+3.16.2 np.cross
+----------------------------------------
+In [1]:import numpy as np
+
+In [2]:a = np.array([1, 2, 3])
+
+In [3]:b = np.array([5, 4, 0])
+
+In [4]:np.cross(a, b) # まずは何も指定しない状態で試す
+
+In [5]:c = np.array([-1, 1, 3])
+
+In [6]:d = np.array([2, 3, 3])
+
+In [7]:np.cross(c, d) # もう1つ別の組み合わせで試す
+
+In [8]:b_2 = np.array([5, 4])
+
+In [9]:np.cross(a, b_2)
+
+In [10]:ac = np.vstack((a, c))
+
+In [11]:bd = np.vstack((b, d)) # axis=0方向に結合する
+
+In [12]:ac
+
+In [13]:bd
+
+In [14]:np.cross(ac, bd) # 外積を求める
+
+In [15]:ac_2 = ac.transpose() # 転置を行う
+
+In [16]:ac_2
+
+In [17]:np.cross(ac_2, bd) # ac,bdのshapeが異なるため、axisaかaxisbを指定しないとエラーになってしまう
+
+In [18]:np.cross(ac_2, bd, axisa=0) # aとcがaxis=0方向に格納されているのでこのようにaxisa=0とするとうまくいく
+
+In [19]:bd_2 = bd.transpose()
+
+In [20]:bd_2
+
+In [21]:np.cross(ac, bd_2, axisb=0)
+
+In [22]:np.cross(ac, bd, axisc=1) # これは結果が変わらない
+
+In [23]:np.cross(ac, bd, axisc=0) # 転置された配列が返される
+
+In [24]:np.cross(ac_2, bd_2, axis=0)
+
+In [25]:np.cross(np.array([1, 1, 1, 1]), np.array([1, 1, 1, 1]))
+
+In [26]:np.cross(np.array([1]), np.array([1])) # 要素数が1でもエラーになる
+
+3.17 畳み込み積分や移動平均を求めるconvolve
+----------------------------------------
+3.17.1 np.convolve
+----------------------------------------
+In [1]:import numpy as np
+
+In [2]:a = np.array([0, 1, 2, 3, 4, 5]) # 配列a
+
+In [3]:v = np.array([0.2, 0.8]) # 配列v
+
+In [4]:np.convolve(a, v, mode='same') # まずは'same'から
+
+In [5]:np.convolve(a, v, mode='full') # これがデフォルトの状態
+
+In [6]:np.convolve(a, v, mode='valid') # mode='valid'の場合
+
+ノイズの混じったデータを平滑化する
+----------------------------------------
+［ターミナル］
+$ python sinewave.py

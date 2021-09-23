@@ -1,0 +1,1754 @@
+Chapter2 NumPy配列を操作する関数を知る
+----------------------------------------
+2.1 配列を形状変換するreshape
+----------------------------------------
+2.1.1 np.reshape
+----------------------------------------
+In [1]:import numpy as np
+
+In [2]:a = np.arange(12) # １つの１次元配列を生成する
+
+In [3]:a
+
+In [4]:b = np.reshape(a, (3, 4)) # 3×4の２次元配列に変形する
+
+In [5]:b # 変形できているかを確認する
+
+In [6]:b[0, 1] = 0 # 1つだけ要素を変更する
+
+In [7]:b
+
+In [8]:a # aにも変更が反映されている
+
+In [9]:c = np.arange(12) # もう一度同じ配列を生成する
+
+In [10]:d = np.reshape(c, (3,4), order='C') # orderを設定することで、並べ替え方を設定できる
+
+In [11]:d # 'C'はデフォルトで設定されているので、特に変化はない
+
+In [12]:d = np.reshape(c, (3, 4), order='F') # orderを'F'にするとまず高い次元のインデックスが変化していくように変形される
+
+In [13]:d
+
+In [14]:np.reshape(c, (3, 5)) # 変形後の配列のshapeが要素数に合わないとエラーが返ってくる
+
+In [15]:a = np.arange(12) # もう一度配列を生成する
+
+In [16]:np.reshape(a, (3, -1)) # (n, -1)とshapeを指定するとn×m (mは配列の要素数に合わせた値)の配列を返す
+
+In [17]:np.reshape(a, (-1, 6)) # 違う値でも試す
+
+In [18]:a = np.arange(12).reshape((3, 4))
+
+In [19]:a
+
+In [20]:b = np.arange(12).reshape((3, -1)) # -1も使える
+
+In [21]:b
+
+In [22]:c = np.arange(15).reshape((3, 4)) # 要素数と出力する配列が異なると、エラーが返る
+
+2.1.2 np.resize
+----------------------------------------
+In [23]:a = np.arange(12)
+
+In [24]:np.reshape(a, (3, 4)) # まずは3×4の2次元配列を生成する
+
+In [25]:np.resize(a, (3, 5)) # 配列のサイズが要素数より大きいと繰り返される
+
+In [26]:np.resize(a, (3, 2)) # 逆に配列のサイズが小さいと、元のデータが使用されない
+
+In [27]:b = np.resize(a, (3, 4))
+
+In [28]:b[0, 1] = 0 # 配列の要素を変更する
+
+In [29]:b
+
+In [30]:a # オリジナルの配列を確かめると、変更が反映されていない
+
+2.1.3 ndarray.resize
+----------------------------------------
+In [31]:a = np.arange(12) # 元となる配列を1つ生成する
+
+In [32]:a.resize((3, 4)) # 変形する
+
+In [33]:a
+
+In [34]:a.resize((3, 5)) # 先程までのnp.resizeとは異なり、要素数と出力される配列の形が合致しないと、エラーが返ってくる
+
+In [35]:a.resize((3, 5), refcheck=False) # 引数であるrefcheckをFalseにしておくと、配列の形に合わせて要素を合わせてくれる。ただし、欠損値に入る値は0となる
+
+In [36]:a
+
+In [37]:b = np.arange(12) # また１つ新たに配列を生成する
+
+In [38]:c = b # cにbを代入する
+
+In [39]:c.resize((3, 4)) # cだけ形を変える
+
+In [40]:c
+
+In [41]:b # bにもcの変更が反映されている
+
+----------------------------------------
+2.2 配列末尾へ要素を追加するappend
+----------------------------------------
+2.2.1 Pythonのlistのappendメソッド
+----------------------------------------
+In [1]:a = [1, 2, 3]
+
+In [2]:a.append(2)
+
+In [3]:a
+
+In [4]:a = [1, 2, 3]
+
+In [5]:a.extend([4, 5, 6])
+
+In [6]:a
+
+2.2.2 np.append
+----------------------------------------
+In [7]:import numpy as np
+
+In [8]:a = np.arange(12)
+
+In [9]:np.append(a, [6, 4, 2]) # aの末尾に要素を追加
+
+In [10]:b = np.arange(12).reshape((3, 4))
+
+In [11]:b
+
+In [12]:np.append(b, [1, 2, 3, 4]) # axisを指定しないと1次元配列が返ってくる
+
+In [13]:b
+
+In [14]:np.append(b, [[12, 13, 14, 15]], axis=0)
+
+In [15]:np.append(b, [12, 13, 14, 15], axis=0) # shapeが一致していない時はエラーが発生する
+
+In [16]:c = np.arange(12).reshape((3, 4))
+
+In [17]:c
+
+In [18]:d = np.linspace(0, 26, 12).reshape(3, 4) # 今度はcと同じshapeの配列を生成する
+
+In [19]:d
+
+In [20]:np.append(c,d, axis=0) # axisに0を指定すると行方向に追加される
+
+In [21]:np.append(c, d, axis=1) # axisに1を指定すると列方向に要素が追加される
+
+In [22]:def np_append():
+...:    a = np.array([1, 2, 3])
+...:    for i in range(10000):
+...:        a = np.append(a, [i])
+...:    return a
+
+------------------
+In [22]:利用しやすいテキスト
+------------------
+def np_append():
+    a = np.array([1, 2, 3])
+    for i in range(10000):
+        a = np.append(a, [i])
+    return a
+------------------
+
+In [23]:def list_append():
+...:    a = [1, 2, 3]
+...:    for i in range(10000):
+...:        a.append(i)
+...:    return np.array(a)
+
+------------------
+In [23]:利用しやすいテキスト
+------------------
+def list_append():
+    a = [1, 2, 3]
+    for i in range(10000):
+        a.append(i)
+    return np.array(a)
+------------------
+
+In [24]:%timeit np_append()
+
+In [25]:%timeit list_append()
+
+2.3 配列の真偽判定に役立つallとany
+----------------------------------------
+2.3.1 np.all
+----------------------------------------
+In [1]:import numpy as np
+
+In [2]:a = np.array([
+...:[1, 1, 1],
+...:[1, 0, 0],
+...:[1, 0, 1],
+...:])
+
+------------------
+In [2]:利用しやすいテキスト
+------------------
+a = np.array([
+[1, 1, 1],
+[1, 0, 0],
+[1, 0, 1],
+])
+------------------
+
+In [3]:np.all(a) # aの要素が1ならTrue、0ならFalseになる
+
+In [4]:b = np.ones((3, 3))
+
+In [5]:np.all(b)
+
+In [6]:np.all(a<2) # aの要素がすべて2未満ならTrue
+
+In [7]:np.all(b%3<2) # 3で割った余りが2未満
+
+In [8]:np.all(a, axis=0) # 行方向に見ていく
+
+In [9]:np.all(a, axis=1) # 列方向に見ていく
+
+In [10]:a[2,0] = 0
+
+In [11]:a
+
+In [12]:np.all(a, axis=0)
+
+In [13]:np.all(a, axis=0, keepdims=True) # keepdims=Trueにする
+
+In [14]:a.all()
+
+In [15]:b.all()
+
+In [16]:a.all(axis=1) # 列方向
+
+In [17]:(a<2).all()
+
+In [18]:a.all(keepdims=True)
+
+2.3.2 np.any
+----------------------------------------
+In [19]:a = np.random.randint(10, size=(2, 3))
+
+In [20]:a
+
+In [21]:np.any(a==9) # aの要素で9となるものが1つでもあるかどうかを調べる。この場合、9となるものがあるのでTrue
+
+In [22]:np.any(a==5) # この場合、5となるものは1つもないのでFlase
+
+In [23]:np.any(a%2==0, axis=0) # 行方向に見ていく
+
+In [24]:np.any(a%2==1, axis=1) # 列方向に見ていく
+
+In [25]:np.any(a%2==1, axis=1, keepdims=True) # keepdims=Trueにして次元保存
+
+In [26]:np.any(a>2, keepdims=True)
+
+In [27]:(a%5==0).any()
+
+In [28]:(a>3).any()
+
+In [29]:b = np.random.randint(10, size=(2, 3))
+
+In [30]:b
+
+In [31]:(a==b).any(axis=1)
+
+In [32]:(a==b).any(axis=1, keepdims=True)
+
+2.4 条件を満たす要素のインデックスを取得するwhere
+----------------------------------------
+2.4.1 np.where
+----------------------------------------
+In [1]:import numpy as np
+
+In [2]:a = np.array([10, 12, 9, 3, 19])
+
+In [3]:a[a<10]
+
+In [4]:a = np.arange(20, 0, -2) # まずは1次元配列を生成
+
+In [5]:a
+
+In [6]:np.where(a < 10) # 10未満のインデックスを取得
+
+In [7]:a[np.where(a < 10)]
+
+In [8]:a = np.arange(12).reshape((3, 4)) 
+
+In [9]:a
+
+In [10]:np.where(a % 2 == 0) # 偶数だけ取り出してみる
+
+In [11]:np.where(a%2==0, 'even', 'odd') # 偶数ならeven、奇数ならoddと返す
+
+In [12]:np.where(a%2==0, 'even') # Trueの時だけ値を設定するとエラーが返ってくる
+In [13]:np.where(a%2==0, 'even', 'odd') # 偶数ならeven、奇数ならoddと返す
+
+In [14]:b = np.reshape(a, (3, 4))
+
+In [15]:c = b ** 2
+
+In [16]:c
+
+In [17]:np.where(b%2==0, b, c) # 奇数の箇所だけcの要素に取り替える
+
+In [18]:np.where(b%2==0, b, (10, 8, 6, 4)) # ブロードキャストが適用され、(10, 8, 6, 4)が繰り返されたものが使われている
+
+2.5 最大値、最小値を抜き出すamax、maxとamin、min
+----------------------------------------
+2.5.1 np.amax
+----------------------------------------
+In [1]:import numpy as np
+
+In [2]:np.amax(np.array([1, 2, 3, 2, 1]))
+
+In [3]:arr = np.array([1, 2, 3, 4]).reshape((2, 2,))
+
+In [4]:np.amax(arr, axis=0)
+
+In [5]:np.amax(arr, axis=1)
+
+In [6]:np.amax(arr, keepdims=True)
+
+2.5.2 ndarray.max
+----------------------------------------
+In [7]:a = np.random.rand(20) # randを使って乱数を20個生成する
+
+In [8]:a
+
+In [9]:a.max()
+
+In [10]:a = a.reshape((4, 5))
+
+In [11]:a
+
+In [12]:a.max()
+
+In [13]:a.max(axis=0) # 引き続きaを用いて最大値を求める。まずは行ごとの最大値を求める
+
+In [14]:a.max(axis=1) # 次に列ごとの最大値を求める
+
+In [15]:b = np.random.rand(30).reshape((2, 3, 5)) # 次は3次元配列で試す
+
+In [16]:b
+
+In [17]:b.max(axis=0) # 2つの2次元配列の要素のうちの最大値を求める
+
+In [18]:b.max(axis=1) # 各2次元配列の行方向の最大値を求める
+
+In [19]:b.max(axis=2) # 各2次元配列の列方向の最大値を求める
+
+In [20]:b = np.arange(10, dtype=np.float)
+
+In [21]:b[3] = np.NaN # NaNを代入
+
+In [22]:b.max()
+
+In [23]:np.nanmax(b) # nanmaxを使うとNaN以外の要素における最大値を返してくれる
+
+2.5.3 np.amin
+----------------------------------------
+In [24]:a = np.array([
+...:[1.2, 1.3, 0.1, 1.5],
+...:[2.1, 0.2, 0.3, 2.0],
+...:[0.1, 0.5, 0.5, 2.3]])
+
+------------------
+In [24]:利用しやすいテキスト
+------------------
+a = np.array([
+[1.2, 1.3, 0.1, 1.5],
+[2.1, 0.2, 0.3, 2.0],
+[0.1, 0.5, 0.5, 2.3]])
+------------------
+
+In [25]:np.amin(a) # 特に引数を指定しない状態
+
+In [26]:np.amin(a, axis=0) # 行方向に最小値を1つずつ抽出する
+
+In [27]:np.amin(a, axis=1) # 列方向に最小値を1つずつ抽出する
+
+In [28]:np.amin(a, axis=0, keepdims=True) # 1次元ではなく2次元配列で返される
+
+In [29]:np.amin(a, axis=1, keepdims=True)
+
+In [30]:a - np.amin(a, axis=1, keepdims=True) # keepdims=Trueにするとブロードキャストが適用できる
+
+In [31]:a - np.amin(a, axis=1) # keepdims=Trueにしないとうまく計算できない
+
+2.5.4 np.ndarray.min
+----------------------------------------
+In [32]:a = np.array([
+...:[1.2, 1.3, 0.1, 1.5],
+...:[2.1, 0.2, 0.3, 2.0],
+...:[0.1, 0.5, 0.5, 2.3]])
+
+------------------
+In [32]:利用しやすいテキスト
+------------------
+a = np.array([
+[1.2, 1.3, 0.1, 1.5],
+[2.1, 0.2, 0.3, 2.0],
+[0.1, 0.5, 0.5, 2.3]])
+------------------
+
+In [33]:a.min() # まずは引数を指定しない状態で最小値を抽出する
+
+In [34]:a.min(axis=0) # 軸を指定して最小値を抽出する
+
+In [35]:a.min(axis=1)
+
+In [36]:a.min(axis=0, keepdims=True)
+
+In [37]:a.min(axis=1, keepdims=True)
+
+2.6 配列の最大要素のインデックスを返すargmax
+----------------------------------------
+2.6.2 np.argmax
+----------------------------------------
+In [1]:import numpy as np
+
+In [2]:a = np.random.randint(10, size=10) # まずは1次元配列から生成する
+
+In [3]:a # aの値を確認する
+
+In [4]:np.argmax(a)
+
+In [5]:a.argmax()
+
+In [6]:b = np.random.randint(10, size=(3, 4)) 
+
+In [7]:b # bの要素を確認する
+
+In [8]:np.argmax(b) # 2次元配列の最大値のインデックスを求めているが、1次元配列に直した後のインデックスが返ってくる。この場合は1
+
+In [9]:b.argmax() # np.ndarray.argmaxについても同様
+
+In [10]:b
+
+In [11]:np.argmax(b, axis=0) # axis=0(この場合は行)方向の最大値を見ていく（縦方向に見てその最大値のインデックスをとっていくから要素数は4）
+
+In [12]:b.argmax(axis=0) # np.ndarray.argmaxも同様
+
+In [13]:np.argmax(b, axis=1) # axisを1に指定して見る。この時は列方向の最大値を見ていく(横方向の成分の中での最大値)
+
+In [14]:b.argmax(axis=1)
+
+In [15]:c = np.random.randint(10, size=(2, 3, 4)) # 2×3×4の3次元行列を生成する
+
+In [16]:c # cの値を確認する
+
+In [17]:np.argmax(c, axis=0)
+
+In [18]:c.argmax(axis=0)
+
+In [19]:np.argmax(c, axis=1)
+
+In [20]:c.argmax(axis=1)
+
+In [21]:np.argmax(c, axis=2)
+
+In [22]:c.argmax(axis=2)
+
+2.6.4 np.argmin
+----------------------------------------
+In [23]:d = np.array([
+...:[1.2, 1.5, 2.3, 1.8],
+...:[0.2, 2.5, 2.1, 2.0],
+...:[3.1, 3.3, 1.5, 2.1]])
+
+------------------
+In [23]:利用しやすいテキスト
+------------------
+d = np.array([
+[1.2, 1.5, 2.3, 1.8],
+[0.2, 2.5, 2.1, 2.0],
+[3.1, 3.3, 1.5, 2.1]])
+------------------
+
+In [24]:d.argmin() # まずは引数を指定しない状態で実行する
+
+In [25]:np.argmin(d) # 同様に実行する
+
+In [26]:np.unravel_index(np.argmin(d), d.shape) # このようにすれば1次元化されない状態でのインデックスが返される
+
+In [27]:np.argmin(d, axis=0) # 次は軸を指定する
+
+In [28]:np.argmin(d, axis=1)
+
+In [29]:d.argmin(axis=1) # ndarray.argminでももちろん同じ操作ができる
+
+2.7 配列の軸の順序を入れ替えるtranspose
+----------------------------------------
+2.7.2 numpy.ndarray.transpose
+----------------------------------------
+In [1]:import numpy as np
+
+In [2]:a = np.arange(12).reshape(3, 4)
+
+In [3]:a
+
+In [4]:a.transpose() # まずは何も引数を指定せずに転置
+
+In [5]:a.transpose(1, 0) # 軸の順番を指定する。これは軸の順番を逆にしただけなので直前の操作の結果と同じ配列が返ってくる
+
+In [6]:a.transpose((1, 0)) # タプルを指定できる
+
+In [7]:a.transpose(0, 1) # 元の順番のまま軸を指定すると配列に変化はない
+
+In [8]:b = np.arange(6) # 今度は1次元配列を転置してみる
+
+In [9]:b
+
+In [10]:b.transpose() # 特に変化は起こらない
+
+In [11]:b.shape # ここでbのshapeを確認。軸が１つしかないことがわかる
+
+In [12]:b = b.reshape((1, 6)) # このように軸を2つ指定すると転置ができるようになる
+In [13]:b
+
+In [14]:b.transpose()
+
+In [15]:c = np.arange(24).reshape(4, 3, 2) # 4×3×2の３次元配列。ちなみに、axis=0の要素数が4、axis=1の要素数が3、axis=2の要素数が2となっている
+
+In [16]:c
+
+In [17]:c.transpose() # 引数を何も指定しないと軸の順番が逆になった(2, 1, 0)の配列を返す
+
+In [18]:c.transpose(1, 0, 2) # 軸の順番を指定してみる
+
+2.7.3 numpy.transpose
+----------------------------------------
+In [19]:np.transpose(c) # 3次元配列のcを再び転置する
+
+In [20]:c.shape
+
+In [21]:np.transpose(c).shape
+
+In [22]:np.transpose(c, (1, 0, 2)) # 軸の順番を指定する
+
+In [23]:np.transpose(c, (1, 0, 2)).shape # shapeを確認する
+
+In [24]:b
+
+In [25]:np.transpose(b) # これはnumpy.ndarray.transposeと同様に転置しても変化がない
+
+In [26]:b = b.reshape((1, 6))
+
+In [27]:b
+
+In [28]:np.transpose(b) # shapeを変化させれば転置できる。numpy.ndarray.transposeと同様
+
+2.7.4 numpy.ndarray.T
+----------------------------------------
+In [29]:a # 再び、a、b、cそれぞれについてTを使って転置を行う
+
+In [30]:a.T
+
+In [31]:b
+
+In [32]:b.T
+
+In [33]:c
+
+In [34]:c.T
+
+In [35]:a.transpose().shape == a.T.shape # それぞれの転置後のshapeを比較する
+
+In [36]:b.transpose().shape == b.T.shape
+
+In [37]:c.transpose().shape == c.T.shape
+
+2.8 ソートをするsortとargsort
+----------------------------------------
+2.8.1　np.sort
+----------------------------------------
+
+In [1]:import numpy as np
+
+In [2]:a = np.random.randint(0, 100, size=20)
+
+In [3]:a
+
+In [4]:np.sort(a)
+
+2.8.2 np.argsort
+----------------------------------------
+In [5]:a = np.array([1, 3, 2])
+
+In [6]:np.argsort(a)
+
+2.8.3  kindで指定可能なquicksort、mergesort、heapsortについて
+----------------------------------------
+［ターミナル］
+$ python test.py
+
+In [1]:from test import *
+
+In [2]:sort_comparison(100)
+
+In [3]:sort_comparison(1000)
+
+In [4]:sort_comparison(10000)
+
+In [5]:sort_comparison(100000)
+
+2.8.4 引数orderについて
+----------------------------------------
+In [6]:values = [('Alice', 25, 9.7), ('Bob', 12, 7.6), ('Catherine', 1, 8.6), ('David', 10, 7.6)]
+
+In [7]:dtype = [('name', 'S10'),('ID', int), ('score', float)]
+
+In [8]:a = np.array(values, dtype=dtype)
+
+In [9]:np.sort(a, order='score')
+
+In [10]:np.argsort(a, order='score') # もちろん、argsortでもできる
+
+In [11]:np.sort(a, order=['score', 'ID'])
+
+In [12]:np.argsort(a, order=['score', 'ID'])
+
+In [13]:b = np.random.randint(0, 100, size=20).reshape(4,5)
+
+In [14]:b # bを2次元配列にした
+
+In [15]:np.sort(b) # axisを指定しないと列方向の中でソートする
+
+In [16]:np.argsort(b) # argsortも同様。表示されるインデックスが列番号だけになっている
+
+In [17]:np.sort(b, axis=0) # 次はaxisを指定する
+
+In [18]:np.argsort(b, axis=0)
+
+In [19]:c = np.random.randint(0, 100, size=(2, 4, 5))
+
+In [20]:c
+
+In [21]:np.sort(c, axis=0) # 3次元配列でaxis=0の方向にソートする
+
+In [22]:np.argsort(c, axis=0) # 並べ替える要素が2つずつなのでインデックスは0か1
+
+2.8.5 np.sortとnp.ndarray.sort
+----------------------------------------
+In [23]:a = np.random.randint(0, 100, 20) # 乱数を20個生成
+
+In [24]:a
+
+In [25]:np.sort(a) # ソートされた配列が返される
+
+In [26]:a # aの中身は変化ない
+
+In [27]:a.sort() # ndarray.sortを使うと、aの中身がソートされる
+
+In [28]:a
+
+2.9 配列同士を連結する、NumPyのvstackとhstackの使い方
+----------------------------------------
+2.9.1 np.hstack
+----------------------------------------
+In [1]:import numpy as np
+
+In [2]:a = np.arange(12)
+
+In [3]:b = np.arange(2)
+
+In [4]:a
+
+In [5]:b
+
+In [6]:np.hstack((a, b)) # 結合する
+
+In [7]:c = np.arange(2).reshape(1, 2) # 2次元配列を作る
+
+In [8]:c
+
+In [9]:np.hstack((a, c)) # aとつなげるとエラーが返ってくる
+
+In [10]:d = np.arange(5).reshape(1, 5) # shapeを(1, 5)にする
+
+In [11]:d
+
+In [12]:np.hstack((c, d)) # これなら結合できる
+
+In [13]:e = np.arange(12).reshape(2, 2, 3)
+
+In [14]:f = np.arange(6).reshape(2, 1, 3) # 次は3次元で行う
+
+In [15]:e
+
+In [16]:f
+
+In [17]:np.hstack((e, f))
+
+2.9.2 np.vstack
+----------------------------------------
+In [18]:a = np.arange(12).reshape(-1, 1) # 12個の要素を持つ縦ベクトル
+
+In [19]:b = np.arange(2).reshape(-1, 1) # 2個の要素を持つ縦ベクトル
+
+In [20]:a
+
+In [21]:b
+
+In [22]:np.vstack((a, b)) # 結合してみる
+
+In [23]:c = np.arange(2).reshape(1, 2)
+
+In [24]:c
+
+In [25]:np.vstack((a, c)) # aとつなげてみるとエラーが返ってくる
+
+In [26]:d = np.arange(4).reshape(2, 2) # これなら2次元配列を作ることができる
+
+In [27]:c
+
+In [28]:d
+
+In [29]:np.vstack((c, d))
+
+In [30]:e = np.arange(24).reshape(4, 3, 2)
+
+In [31]:f = np.arange(6).reshape(1, 3, 2)
+
+In [32]:e
+
+In [33]:f
+
+In [34]:g = np.vstack((e, f))
+
+In [35]:g # 結合できる
+
+In [36]:g.shape # shapeを確認する
+
+2.10 データを可視化するmatplotlibの使い方
+----------------------------------------
+2.10.1 matplotlibのインストール方法
+----------------------------------------
+［ターミナル］
+$ pip install matplotlib
+
+［ターミナル］
+$ pip install PySide
+$ pip install PySide2
+
+［Jupyter Notebook］
+%matplotlib inline
+
+［IPython］
+In [1]:import numpy as np
+
+In [2]:import matplotlib.pyplot as plt # pltとしてインポートされるのが慣例
+
+
+2.10.3 サイン波のプロット
+----------------------------------------
+In [1]:import numpy as np
+
+In [2]:import matplotlib.pyplot as plt # pltとしてインポートされるのが慣例である
+
+In [3]:X = np.linspace(-10, 10, 1000)
+
+In [4]:y = np.sin(X) # サインの値を計算する
+
+In [5]:plt.plot(X, y) # プロットをする。plotで点と点同士をなめらかにつなぐ
+
+In [6]:plt.show() # グラフを表示する
+
+In [7]:plt.grid(True)
+
+In [8]:plt.plot(X, y)
+
+In [9]:plt.show()
+
+In [10]:plt.title('sine wave')
+
+In [11]:plt.xlabel('X') # x軸のラベル
+
+In [12]:plt.ylabel('y') # y軸のラベル
+
+In [13]:plt.plot(X, y)
+
+In [14]:plt.show()
+
+In [15]:plt.xlim(-5,5) # -5から5の範囲に
+
+In [16]:plt.ylim(-0.5, 1.0) # -0.5から1の範囲に
+
+In [17]:plt.plot(X, y)
+
+In [18]:plt.xlabel('X')
+
+In [19]:plt.ylabel('y')
+
+In [20]:plt.title('limited scale')
+
+In [21]:plt.show()
+
+In [22]:x = np.random.randn(1000) # 標準正規分布に従った乱数を1,000個作成する
+
+In [23]:y = np.random.randn(1000)
+
+In [24]:plt.scatter(x, y)
+
+In [25]:plt.title('scatter')
+
+In [26]:plt.xlabel('x')
+
+In [27]:plt.ylabel('y')
+
+In [28]:plt.grid() # Trueを入れなくてもgridは入る
+
+In [29]:plt.show()
+
+In [30]:plt.hist(x) # ヒストグラムを作成する
+
+In [31]:plt.xlabel('x')
+
+In [32]:plt.ylabel('frequency')
+
+In [33]:plt.show()
+
+In [34]:x = np.linspace(-10, 10, 1000)
+
+In [35]:y_1 = np.sin(x)
+
+In [36]:y_2 = np.cos(x)
+
+In [37]:plt.plot(x, y_1)
+
+In [38]:plt.plot(x, y_2)
+
+In [39]:plt.grid()
+
+In [40]:plt.xlabel('x')
+
+In [41]:plt.ylabel('y')
+
+In [42]:plt.show()
+
+2.11 要素がゼロの配列を生成する関数のまとめ
+----------------------------------------
+2.11.1 np.zeros
+----------------------------------------
+In [1]:import numpy as np
+
+In [2]:np.zeros(10) # 1次元配列で生成する
+
+In [3]:np.zeros(10, dtype=int) # データ型をintに指定する
+
+In [4]:np.zeros((3, 4)) # 3×4の2次元配列を生成する
+
+2.11.2 np.emptyとnp.zerosとの違い
+----------------------------------------
+
+In [5]:def zeros():
+...:    for i in range(10000):
+...:        _ = np.zeros((1, i))
+
+------------------
+In [5]:利用しやすいテキスト
+------------------
+def zeros():
+    for i in range(10000):
+        _ = np.zeros((1, i))
+------------------
+
+In [6]:def empty():
+...:     for i in range(10000):
+...:         _ = np.empty((1, i))
+
+------------------
+In [6]:利用しやすいテキスト
+------------------
+def empty():
+    for i in range(10000):
+        _ = np.empty((1, i))
+------------------
+
+In [7]:%timeit zeros()
+
+In [8]:%timeit empty()
+
+2.12 要素が１の配列を生成するones
+----------------------------------------
+2.12.1 np.ones
+----------------------------------------
+In [1]:import numpy as np
+
+In [2]:np.ones(3) # 要素が3つの1次元配列
+
+In [3]:np.ones((2, 3)) # 2×3の2次元配列
+
+In [4]:np.ones(4, dtype="float32") # データ型を"float32"にする
+
+In [5]:np.ones(4, dtype=np.int8) # データ型を"int8"にする。NumPyで定義されたオブジェクトを使って指定することもできる
+
+In [6]:np.ones((2,3), dtype="complex") # 複素数の形にすることもできる
+
+2.12.2 np.ones_like
+----------------------------------------
+In [7]:a = np.array([[1, 2, 3],[2, 3, 4]])
+
+In [8]:np.ones_like(a)
+
+In [9]:b = np.array([2, 3, 4], dtype="int8" )
+
+In [10]:np.ones_like(b)
+
+2.13 連番や等差数列を生成するarange
+----------------------------------------
+2.13.1　Pythonのrange関数
+----------------------------------------
+［ターミナル］
+$ python
+>>>[x for x in range(10)]
+
+>>>import numpy as np
+>>>np.array(range(10))
+
+2.13.3 np.arange
+----------------------------------------
+
+In [1]:import numpy as np
+
+In [2]:np.arange(5) # 0～5の等差数列（ただし引数として指定した5は数列の範囲に含まれない）
+
+In [3]:np.arange(-10) # 負の値を指定すると要素を持たない配列が返される
+
+In [4]:np.arange(4.5) # floatの形式でも配列は生成される
+
+In [5]:np.arange(1, 8)
+
+In [6]:np.arange(2, 10)
+
+In [7]:np.arange(0.5, 5.5) # 小数点以下の値で設定しても配列は生成される
+
+In [8]:np.arange(0.55, 5.55)
+
+In [9]:np.arange(2, 12, 2) # 初項2、公差2で終点が12の等差数列
+
+In [10]:np.arange(2, 5, 0.2) # 公差は整数でなくともよい
+
+In [11]:np.arange(5, 2, -1) # 公差は負の値を指定できる
+
+In [12]:np.arange(stop=3, step=1) # startを指定しないとエラーが返ってくる
+
+In [13]:np.arange(5, dtype='float64') # 浮動小数点数に変換する
+
+In [14]:np.arange(5.0, dtype='int') # 整数に変換する
+
+In [15]:np.arange(0, 5, 0.5, dtype='int') # 公差にキリが悪いものを持ってくると切り捨てされる
+
+In [16]:np.arange(0, 5, 1.5, dtype='int') # 先ほどと同様に範囲からはみ出た部分は切り捨てされる
+
+2.14 線形に等間隔な数列を生成するlinspace
+----------------------------------------
+2.14.1 np.linspace
+----------------------------------------
+In [1]:import numpy as np
+
+In [2]:np.linspace(0, 1) # まずは始点を0、終点を1に設定する
+
+In [3]:np.linspace(0, 49) # 50個の要素が生成されることに注意して、幅を1に調整する
+
+In [4]:np.linspace(0, 2, 3) # 0～2の区間を3等分する
+
+In [5]:np.linspace(0, -2, 3) #負の値でも生成可能である
+
+In [6]:np.linspace(0, 2, num=3) # num = 3 のように指定することもできる
+
+In [7]:np.linspace(0, 2, num=3, endpoint=False) 
+
+In [8]:np.linspace(0, 2, num=3, endpoint=True) # 2を要素に含む配列(ndarray)を返す。これがデフォルトである
+
+In [9]:np.linspace(0, 1, retstep=True) # 公差の表示を有りにする
+
+In [10]:np.linspace(0, 2, num=3, retstep=True)
+
+In [11]:np.linspace(0, 2, num=3, retstep=False) # 公差を非表示にする（デフォルトの設定）
+
+In [12]:np.linspace(0, 2, num=3) # 何もデータ型を指定しないと、floatの形になる
+
+In [13]:a = np.linspace(0, 1, 3)
+
+In [14]:a.dtype # データ型を確認
+
+In [15]:np.linspace(0, 2, num=3, dtype='int') # データ型を'int'に指定
+
+In [16]:np.linspace(0, 1, num=4, dtype='float32') # データ型を'float32'にすると32ビット浮動小数点数となる
+
+In [17]:np.linspace(0, 1, num=4, dtype='float64') # データ型を'float64'にすると64ビットの浮動小数点数となる
+
+2.15 単位行列を生成するeyeとidentity
+----------------------------------------
+2.15.3 np.eye
+----------------------------------------
+In [1]:import numpy as np
+
+In [2]:np.eye(3) # 3×3の単位行列
+
+In [3]:np.eye(10)
+
+In [4]:np.eye(2, 3) # 2×3
+
+In [5]:np.eye(5, 4) # 5×4
+
+In [6]:np.eye(5, k=0) # k=0にすると対角成分は移動しない
+
+In [7]:np.eye(5, k=1) # 上方に1つ移動する
+
+In [8]:np.eye(5, k=-1) # 下方に1つ移動する
+
+In [9]:np.eye(5, k=3) # 上方に3つ移動する
+
+In [10]:np.eye(5, dtype=int)
+
+In [11]:np.eye(5, dtype=complex) # 複素数型で指定する
+
+2.15.4 np.identity
+----------------------------------------
+In [12]:np.identity(5) # まずは単純なものから表示する
+
+In [13]:np.identity(2)
+
+In [14]:np.identity(3, dtype=int)
+
+In [15]:np.identity(4, dtype="float32")
+
+In [16]:%timeit np.eye(10000)
+
+In [17]:%timeit np.identity(10000)
+
+2.16 未初期化の配列を生成するempty
+----------------------------------------
+2.16.1 np.empty
+----------------------------------------
+In [1]:import numpy as np
+
+In [2]:np.empty(10) # 値を初期化しない1次元配列
+
+In [3]:np.empty((2, 3)) # 2×3の2次元配列
+
+In [4]:np.empty(5, dtype=np.int8) # dtypeをint8に指定
+
+In [5]:np.empty(10, dtype=np.bool) # bool値にすることもできる
+
+In [6]:np.empty(10, dtype=complex) # 複素数でも生成可能
+
+2.16.2 他の生成関数との比較
+----------------------------------------
+In [7]:%timeit np.zeros(10000)
+
+In [8]:%timeit np.empty(10000)
+
+In [9]:%timeit np.ones(10000)
+
+2.17 randomモジュールを使った配列操作・乱数生成方法
+----------------------------------------
+2.17.1 一様乱数を生成
+----------------------------------------
+In [1]:import numpy as np
+
+In [2]:np.random.rand() # 何も値を設定しないと1つだけ値が返ってくる
+
+In [3]:np.random.randint(10) # 0～9の範囲にあるのランダムな整数を返す
+
+In [4]:np.random.rand(2,3) # 2×3の乱数配列
+
+In [5]:np.random.randint(10, size=(2,3)) # size(デフォルトはNone)に配列の形を代入する
+
+In [6]:np.random.randint(5,10, size=10) # 5以上10"未満"の範囲でのランダムな整数を返す
+
+In [7]:(10-5)*np.random.rand(10) + 5 # 5以上10"未満"の範囲でランダムな実数を返す
+
+2.17.2 生成する乱数を固定する
+----------------------------------------
+In [8]:np.random.seed(seed=21) # シードを21に設定する
+
+In [9]:np.random.rand() # 乱数を1つ生成する
+
+In [10]:np.random.seed(21) # もう一度シードを21に設定する（引数でseedを選択しなくてもシードは設定できる）
+
+In [11]:np.random.rand() # 同じ値が返される
+
+In [12]:np.random.seed(10) # 配列でも同じことができる。シードを10に設定する
+
+In [13]:np.random.rand(20) # 乱数を20個生成する
+
+In [14]:np.random.seed(23) # シードを23に設定する
+
+In [15]:np.random.rand(20) # 乱数を20個生成する
+
+In [16]:np.random.seed(10) # また10に戻して確認する
+
+In [17]:np.random.rand(20) # 同じ値が返ってくる
+
+In [18]:np.random.seed(23) # 同様に、23にも戻して確認する
+
+In [19]:np.random.rand(20) # 同じ値が返ってくる
+
+2.17.3 リストからのランダムな抽出、リストのシャッフル
+----------------------------------------
+In [20]:a = ['Python', 'Ruby', 'Java', 'JavaScript', 'PHP'] # リストを1つ作成
+
+In [21]:np.random.choice(a, 3) # aから3つの要素をランダムに取り出す
+
+In [22]:np.random.choice(a, 5, replace=False) # 重複なしで取り出し
+
+In [23]:np.random.choice(a, 20, p = [0.8, 0.05, 0.05, 0.05, 0.05]) # pにリスを渡すことで取り出す値の頻度を変える。pの値の合計は1になることに注意
+
+In [24]:np.random.choice(5, 10) # 最初の引数に整数を渡すと、np.arange(5)で生成されるリストが渡されることと同じことになる。この場合は、0以上5未満の整数をランダムに10個生成する
+
+2.17.4 リストのシャッフル
+----------------------------------------
+In [25]:a = np.arange(10)
+
+In [26]:a
+
+In [27]:np.random.shuffle(a) # aの要素の順番をランダムに入れ替える
+
+In [28]:a # aの中身を確かめる
+
+2.17.5 特定の確率分布に従った乱数の生成
+----------------------------------------
+In [29]:np.random.randn() # 何も引数を入れないと1つだけ返す
+
+In [30]:np.random.normal() # これも同様に1つだけ返す
+
+In [31]:np.random.randn(10) # 1次元配列を返す
+
+In [32]:np.random.normal(loc=1,scale=2.0, size=10) # locは平均、scaleは標準偏差、sizeは返す配列の形
+
+In [33]:np.random.normal(size=10) # randn(10)と同じ実行結果になる
+
+In [34]:np.random.binomial(100, 0.5, 30) # (n, p) = (100, 0.5)での事象が起こる回数。これを30回発生させる
+
+In [35]:np.random.beta(1, 2, size=10) # (α, β) = (1,2)となるベータ分布に基づく乱数を10個生成する
+
+In [36]:np.random.gamma(2, 2, size=10) # (shape, scale) = (α, β) = (2,2)における乱数を生成する
+
+In [37]:np.random.poisson(2, 10) # λ =2.0、size = 10のランダム配列を生成する
+
+In [38]:np.random.poisson(2, (2,2)) # 2次元配列も生成できる
+
+In [39]:np.random.chisquare(2, 10) # 自由度2で10個の値を生成する
+
+In [40]:from matplotlib import pyplot as plt
+
+In [41]:def standard_normal_distribution(x):
+...    return (1/np.sqrt(2*np.pi))*np.exp(-x**2/2)*1000 # 標準正規分布の確率密度関数を1000倍に拡大。(ヒストグラムの度数の幅が0.01なため、データ数の1/100倍だけ拡大)
+
+------------------
+In [41]:利用しやすいテキスト
+------------------
+def standard_normal_distribution(x):
+    return (1/np.sqrt(2*np.pi))*np.exp(-x**2/2)*1000 # 標準正規分布の確率密度関数を1000倍に拡大。(ヒストグラムの度数の幅が0.01なため、データ数の1/100倍だけ拡大)
+------------------
+
+In [42]:a = np.random.randn(100000) # 10万個の標準正規分布に従った乱数を生成
+
+In [43]:x = np.linspace(-5, 5, 1000)
+
+In [44]:plt.hist(a, bins=1000)
+
+In [45]:plt.plot(x, standard_normal_distribution(x))
+
+In [46]:plt.show()
+
+2.18 配列を1次元に変換するflatten
+----------------------------------------
+2.18.1 numpy.ndarray.flatten
+----------------------------------------
+In [1]:import numpy as np
+
+In [2]:a = np.arange(10).reshape(2, 5) # 2×5の2次元配列を生成
+
+In [3]:a
+
+In [4]:b = a.flatten() # 1次元配列に変形したものをbに代入
+
+In [5]:a # a自体は変化していない
+
+In [6]:b # bには変形されたものが代入されている
+
+In [7]:a.shape # shapeも確かめておく
+
+In [8]:b.shape # bのshapeは1次元配列なので1つの数字しか表示されない
+
+In [9]:c = np.arange(12).reshape(2, 2, 3) # 3次元配列でも確かめる
+
+In [10]:c
+
+In [11]:d = c.flatten() # dに1次元配列に変形したものを代入する
+
+In [12]:c
+
+In [13]:d
+
+In [14]:c.shape # cのshapeとdのshapeをこちらでも確認しておく
+
+In [15]:d.shape
+
+2.18.2 パフォーマンス
+----------------------------------------
+In [16]:arr = np.repeat(5, 10000).reshape(250, 40)
+
+In [17]:%timeit arr.flatten()
+
+In [18]:%timeit np.ravel(arr)
+
+2.19 loadtxtとsavetxtを使ってテキストファイルを読み書きする
+----------------------------------------
+2.19.5 np.savetxt
+----------------------------------------
+In [1]:import numpy as np
+
+In [2]:a = np.random.randn(3, 4) # 標準正規分布に従った乱数を2次元配列で生成する
+
+In [3]:np.savetxt('sample1.txt', a) # 特に何も指定しない状態で保存する
+
+In [4]:b = np.loadtxt('sample1.txt') # 保存したデータを呼び出す
+
+In [5]:a
+
+In [6]:b
+
+In [7]:np.savetxt('sample1.csv', a) # csv形式にも対応している
+
+In [8]:c = np.loadtxt('sample1.csv')
+
+In [9]:c
+
+In [10]:np.savetxt('sample1.dat', a) # dat形式でも問題ない
+
+In [11]:d = np.loadtxt('sample1.dat')
+
+In [12]:d
+
+In [13]:np.savetxt('sample2.txt', a, delimiter=',')
+
+In [14]:e = np.loadtxt('sample2.txt') # delimiterに何も指定しないとエラーが返ってくる
+
+In [15]:e = np.loadtxt('sample2.txt', delimiter=',')
+
+In [16]:e
+
+In [17]:np.savetxt('sample3.txt', a, fmt ='%.2e')
+
+In [18]:np.savetxt('sample4.txt', a, fmt ='%.2f')
+
+In [19]:f = np.array([[10.1+3.21j,100.0+32.1j],[20.0+0.2j,22.1-1j]]) # 複素数を要素とする配列を生成する
+
+In [20]:np.savetxt('sample5.txt', f, fmt=['%.3e+%.3ej', '%.1e+%.1ej'])
+
+In [21]:np.loadtxt('sample4.txt', usecols=(0,2)) # 0、2列目だけを使う
+
+In [22]:np.loadtxt('sample4.txt', skiprows=1) # 0行目をスキップする
+
+In [23]:np.savetxt('sample6.txt', a, fmt='%.3e', header='this is a header',footer='this is a footer')
+
+In [24]:np.savetxt('sample7.txt', a, fmt='%.3e', header='this is a header',footer='this is a footer', comments='>>>')
+
+In [25]:np.loadtxt('sample7.txt', comments='>>>') # loadtxtできちんと読み込めるか確かめる
+
+In [26]:np.loadtxt('foo.csv', dtype=[('col1', 'i8'), ('col2', 'S10'), ('col3', 'f8'), ('col4', 'S10')]) # 8バイトのint、10バイトのstr, 8バイトのfloat,10バイトのstrの順に指定している
+
+In [27]:np.loadtxt('foo.csv', dtype=[('col1', 'i8'), ('col2', 'S10'), ('col3','f8'), ('col4', 'S10')], unpack=True) # unpack=Trueにすると転置が起こる
+
+In [28]:age, gender, tall, driver_lisense=np.loadtxt('foo.csv', dtype=[('col1', 'i8'), ('col2', 'S10'), ('col3', 'f8'), ('col4', 'S10')], unpack=True)
+age
+In [29]:age
+
+In [30]:gender
+
+In [31]:tall
+
+In [32]:driver_lisense
+
+In [33]:def driver_lisense(str): # 関数を2つ定義する
+...:    if str == b'Yes' : return 1
+...:    else: return -1
+
+------------------
+In [33]:利用しやすいテキスト
+------------------
+def driver_lisense(str): # 関数を2つ定義する
+    if str == b'Yes' : return 1
+    else: return -1
+------------------
+
+In [34]:def gender(str):
+...:    if str == b'male': return 1
+...:    else: return -1
+
+------------------
+In [34]:利用しやすいテキスト
+------------------
+def gender(str):
+    if str == b'male': return 1
+    else: return -1
+------------------
+
+In [35]:np.loadtxt('foo.csv', converters={1: lambda s: gender(s), 3: lambda s: driver_lisense(s)}) # 文字列のデータを関数を使って数値に変換する
+
+In [36]:def gender2(str): # 関数を改めて設定する
+...:    if not str: return 0 # 何も入力されていない時は0を返すようにする
+...:
+...:    elif str == b'male': return 1
+...:    else: return -1
+
+------------------
+In [36]:利用しやすいテキスト
+------------------
+def gender2(str): # 関数を改めて設定する
+    if not str: return 0 # 何も入力されていない時は0を返すようにする
+
+    elif str == b'male': return 1
+    else: return -1
+------------------
+
+
+In [37]:np.loadtxt('foo.csv', converters={1: lambda s: gender2(s), 3: lambda s:
+...:driver_lisense(s)}, delimiter=',')
+
+------------------
+In [37]:利用しやすいテキスト
+------------------
+np.loadtxt('foo.csv', converters={1: lambda s: gender2(s), 3: lambda s: driver_lisense(s)}, delimiter=',')
+------------------
+
+In [38]:np.genfromtxt('bar.txt', delimiter=',')
+
+In [39]:np.genfromtxt('bar.txt', delimiter=',', dtype=('int', 'float', 'int')) # int, float, intと交互にしている
+
+In [38]:np.genfromtxt('bar.txt', delimiter=',')
+
+In [39]:np.genfromtxt('bar.txt', delimiter=',', dtype=('int', 'float', 'int')) # int, float, intと交互にしている
+
+2.20 配列データをそのまま読み書きするloadとsave
+----------------------------------------
+2.20.2 np.load
+----------------------------------------
+In [1]:import numpy as np
+
+In [2]:a = np.random.randn(1200*1000).reshape(1200, -1)# 少し大きめの配列を生成する
+
+In [3]:np.save('a', a)
+
+In [4]:np.load('a.npy') # 保存したファイルを呼び出す
+
+In [5]:a.shape
+
+In [6]:b = np.load('a.npy') # 保存したファイルを他の変数に格納する
+
+In [7]:b.shape # shapeがaと一致しているのできちんと読み込めていることがわかる
+
+In [8]:c = np.random.randn(12*20*40).reshape(12, 20, 40) # 今度は３次元で
+
+In [9]:np.save('c', c)
+
+In [10]:d = np.load('c.npy')
+
+In [11]:d.shape
+
+In [12]:e = np.loadtxt('c.npy') # loadtxtでは読み込むことができない
+
+In [13]:np.savetxt('c.npy', c) # savetxtだと3次元配列であるcを格納できない
+
+2.21 bufferをndarrayに高速変換するfrombuffer
+----------------------------------------
+2.21.2 音声ファイルを配列に収納する時間を比較
+
+In [1]:import numpy as np
+
+In [2]:import wave
+
+In [3]:wf = wave.open('sample_sound.wav')
+
+In [4]:channels = wf.getnchannels()
+
+In [5]:wf.getparams()
+
+In [6]:chunk_size = wf.getnframes()
+
+In [7]:chunk_size # 書籍誌面とは異なるサウンドファイルを利用しています（サウンドファイルはフリーWave,MP3より利用。http://www.ne.jp/asahi/music/myuu/wave/wave.htm）
+
+In [8]:data = wf.readframes(chunk_size) # まずは読みとったファイルのすべてを格納する
+
+In [9]:%timeit data2 = np.frombuffer(data, dtype='int16')
+
+In [10]:%timeit data3 = np.fromiter(data, dtype='int16')
+
+2.22 非ゼロ要素を抽出するnonzero
+----------------------------------------
+2.22.2 np.ndarray.nonzero
+----------------------------------------
+In [1]:import numpy as np
+
+In [2]:a = np.random.randint(0, 10, size=20)
+
+In [3]:a # 1次元乱数配列
+
+In [4]:np.nonzero(a) # 非ゼロ要素のインデックスを取得する
+
+In [5]:a.nonzero() # この書式でも問題ない
+
+In [6]:a[np.nonzero(a)] # これで非ゼロ要素を抜き出した配列を生成できる
+
+In [7]:b = np.random.randint(0, 10, size=(4,5)) # 4×5の2次元乱数配列
+
+In [8]:b
+
+In [9]:np.nonzero(b) # 1つめの配列が行方向のインデックス、2つめの配列が列方向のインデックスになっている
+
+In [10]:b.nonzero()
+
+In [11]:b[b.nonzero()] # 非ゼロ要素を抽出する
+
+2.22.3 np.where、np.argwhereとの比較
+----------------------------------------
+In [12]:a = np.random.randint(0, 10, size=(100, 100))
+
+In [13]:b = np.ones(shape=(100, 100))
+
+In [14]:np.where(a != 0, a, b)
+
+In [15]:import numpy as np
+
+In [16]:a = np.random.randint(0, 10, size=(100, 100))
+
+In [17]:np.nonzero(a)
+
+In [18]:np.where(a != 0)
+
+In [19]:np.argwhere(a != 0)
+
+In [20]:np.transpose(np.nonzero(a))
+
+2.23 flattenよりも高速に配列を1次元化するravel
+----------------------------------------
+2.23.3 引数orderについて
+----------------------------------------
+In [1]:import numpy as np
+
+In [2]:a = np.arange(10).reshape(2, 5) 2×5の2次元配列を生成する
+
+In [3]:a
+
+In [4]:a.ravel() # 1次元配列に変更する
+
+In [5]:np.ravel(a) # このような記述でも問題ない
+
+In [6]:a.ravel(order='C') # orderを'C'（初期値）にすると、同じ配列が出てくる
+
+In [7]:a.ravel(order='F') # orderを'F'にすると、行方向から値を読み取る
+
+In [8]:a.ravel(order='A') # FORTRANスタイルで要素を格納していないのでorder='C'と同じ結果になる
+
+In [9]:a.ravel(order='K') # こちらも特に配列のshape変更などをしていないので変化はない
+
+In [10]:b = np.arange(10).reshape(2,5, order='F')
+
+In [11]:b
+
+In [12]:b.ravel(order='F') # 連番になる
+
+
+In [13]:b.ravel(order='A')
+
+In [14]:b.ravel() # order='C'の場合、列方向に読み込む
+
+In [15]:c = b.T
+
+In [16]:c.ravel() # 連番になる
+
+In [17]:c.ravel(order='K') # メモリの順番を読み込む
+
+In [18]:c.T.ravel(order='K')
+
+
+2.24 配列をタイル状に並べるtile
+----------------------------------------
+2.24.1 np.tile
+----------------------------------------
+In [1]:import numpy as np
+
+In [2]:a = np.array([0, 1, 2])
+
+In [3]:np.tile(a, 2) # 1次元配列を2回繰り返す
+
+In [4]:np.tile(a, (3, 2)) # 3×2の2次元配列の要素がaになっているイメージ
+
+In [5]:np.tile(a, (2, 3, 4)) # 3次元にも並べられる
+
+In [6]:b = np.arange(6).reshape(2, 3) # 2次元行列を敷き詰める
+
+In [7]:np.tile(b, 2)
+
+In [8]:np.tile(b, (2, 3))
+
+In [9]:np.tile(b, (2, 1, 1))
+
+2.24.2 np.tileとブロードキャスト
+----------------------------------------
+In [10]:a = np.arange(10000).reshape(-1, 1)
+
+In [11]:b = np.arange(10000)
+
+In [12]:%timeit a*b
+
+In [13]:%timeit np.tile(a, (1, 10000))*np.tile(b, (10000, 1))
+
+In [14]:c = np.random.rand(10)
+
+In [15]:b = np.array([0, 1, 0, 2, 1])
+
+In [16]:b = np.tile(b, 2)
+
+In [17]:c * b
+
+In [18]:b = np.array([0, 1, 0, 2, 1])
+
+In [19]:c * b
+
+2.25 新しく配列に次元を追加するnp.newaxisオブジェクト
+----------------------------------------
+2.25.1 np.newaxisオブジェクトを用いた次元追加
+----------------------------------------
+In [1]:import numpy as np
+
+In [2]:np.newaxis is None
+
+In [3]:x = np.arange(15).reshape(3, 5)
+
+In [4]:x
+
+In [5]:x[np.newaxis, :, :] # 1つ次元を追加してスライシングする
+
+In [6]:x[:, np.newaxis, :] # axis=1のところに入れることも可能
+
+In [7]:x[:, None, :] # Noneで代用も可能
+
+In [8]:x = x.flatten()
+
+In [9]:x # xを１次元配列に変換する
+
+In [10]:x[:, np.newaxis] # xを縦ベクトルにする
+
+2.25.2 np.reshapeでの代用
+----------------------------------------
+In [11]:x = np.arange(15).reshape(3, 5) # xを再び生成する
+
+In [12]:np.reshape(x, (1, 3, 5)) # x[np.newaxis, :,:]
+
+In [13]:np.reshape(x, (3, 1, 5)) # x[:, np.newaxis, :]
+
+In [14]:x = x.flatten() # 1次元配列に変換する
+
+In [15]:np.reshape(x, (-1, 1)) # x[:, np.newaxis]
+
+2.26 要素の差分と足し合わせを計算するdiffとcumsum
+----------------------------------------
+2.26.1 np.diff
+----------------------------------------
+In [1]:import numpy as np
+
+In [2]:a = np.array([1, 2, 4, 1, 6, 8, 3]) # 適当に値を並べた配列を用意する
+
+In [3]:np.diff(a, n=1) # まずはn=1から
+
+In [4]:np.diff(a, n=2) # 次はn=2
+
+In [5]:np.diff(a, n=3) # 次はn=3
+
+In [6]:np.diff(a, n=4) # 最後にn=4
+
+In [7]:b = np.random.randint(10, size=(5, 5))
+
+In [8]:b
+
+In [9]:np.diff(b, axis=-1) # axis=1と同じ意味
+
+In [10]:np.diff(b, axis=0) # 次は行方向
+
+In [11]:np.diff(b, axis=1, n=2) # n=2にする
+
+2.26.3 np.ndarray.cumsum
+----------------------------------------
+In [12]:a = np.random.randint(10, size=20) # 0～9までの乱数を20個生成する
+
+In [13]:a
+
+In [14]:np.cumsum(a) # まずは普通に足し合わせてみる
+
+In [15]:a.cumsum() # この形でも問題ない
+
+In [16]:np.cumsum(a, dtype='float32') # dtypeを"float32"に指定する
+
+In [17]:a.cumsum(dtype='float32')
+
+In [18]:b = np.random.rand(3, 4)*10
+
+In [19]:c = np.random.randint(10, size=10, dtype='int8')
+
+In [20]:c
+
+In [21]:c.cumsum() # 特にdtypeを指定しないと
+
+In [22]:c.cumsum().dtype # int64になる
+
+In [23]:d = c.cumsum(dtype='int8') # dtypeをしっかり指定すればこのような変化は起こらない
+
+In [24]:d.dtype
+
+In [25]:b
+
+In [26]:np.cumsum(b) # axisに何も指定しないとこのようになる
+
+In [27]:np.cumsum(b, axis=1) # こうすると列方向に足し合わせてくれる
+
+In [28]:b.cumsum(axis=1)
+
+In [29]:np.cumsum(b, axis=0) # 行方向に足し合わせる
+
+In [30]:b.cumsum(axis=0)
+
+2.27 多次元配列の結合を行うnp.c_とnp.r_オブジェクト
+----------------------------------------
+2.27.2 np.r_
+----------------------------------------
+In [1]:import numpy as np
+
+In [2]:a = np.array([1, 2, 3])
+
+In [3]:b = np.array([4, 5, 6]) # まずは1次元配列で行う
+
+In [4]:np.r_[a, b]
+
+In [5]:np.r_[2, 5, 3, np.array([2, 3, ]), 4.2]
+
+In [6]:c = np.zeros((2, 3)) # 2次元配列を結合する。axis=1方向の要素数は一致していないと結合できないことに注意する
+
+In [7]:d = np.ones((3, 3)) # cのaxis=1方向の要素数は3なので、それに合わせる。axis=0方向の要素数はcと同じ2である必要はない
+
+In [8]:np.r_[c, d]
+
+In [9]:d = np.ones((3, 4))
+
+In [10]:np.r_[c, d] "# axis=1の要素数が合致してないのでエラーが返る
+
+In [11]:np.r_[0:10]
+
+In [12]:np.r_[:10]
+
+In [13]:np.r_[-10:]
+
+In [14]:np.r_[0:10:2] # 0～9までを2刻みで表記する
+
+In [15]:np.r_[10:0:-1] # 逆順で表記する
+
+In [16]:np.r_[0:10:10j] # 10等分で表記する
+
+In [17]:np.r_[0:9:20j] # 20等分で表記する
+
+In [18]:np.r_[0:10, 0, 4, np.array([3, 3])] # 最後に数字や1次元配列を付け加えることもできる
+
+In [19]:a = np.ones((2, 2))
+
+In [20]:b = np.zeros((2, 2))
+
+In [21]:np.r_['1', a, b] # axis=1（列）方向に結合する
+
+In [22]:np.r_['1', a, b].shape # これのshapeを確認するとaxis=1の要素数が加算されていることがわかる
+
+In [23]:np.r_['0', a, b] # 次は行方向に結合する
+
+In [24]:np.r_['0', a, b].shape # shapeを確認する
+
+In [25]:np.r_[a, b].shape # aを指定しない場合はa=0となっている
+
+In [26]:c = np.ones((2, 2, 2)) # 次は3次元で結合する
+
+In [27]:d = np.zeros((2, 2, 2))
+
+In [28]:c
+
+In [29]:d
+
+In [30]:np.r_['0', c, d] # まずはaxis=0の方向に結合する
+
+In [31]:np.r_['1', c, d]
+
+In [32]:np.r_['2', c, d]
+
+In [33]:np.r_['0', c, d].shape # これらのshapeを一通り確認しておく。すべて番号に対応する箇所の要素数が加算されていることがわかる
+
+In [34]:np.r_['1', c, d].shape
+
+In [35]:np.r_['2', c, d].shape
+
+In [36]:np.r_['0,2', [0, 1, 2],[3, 3, 3]] # 2次元配列でaxis=0の方向に結合する
+
+In [37]:np.r_['0, 2', [0, 1, 2], [3, 3, 3]].shape
+
+In [38]:np.r_['0, 3', [0, 1, 2], [3, 3, 3]] # 3次元配列でaxis=0の方向に結合する
+In [39]:np.r_['0, 3', [0, 1, 2], [3, 3, 3]].shape
+
+In [40]:np.r_['-1, 4', [0, 1, 2], [3, 3, 3]] # 4次元でも。ここでは最低次元で結合させる
+
+In [41]:np.r_['-1, 4', [0, 1, 2], [3, 3, 3]].shape
+
+In [42]:np.r_['0, 2, -1', [0, 1, 2], [3, 3, 3]] # (3,)→(1, 3) になってから、axis=0方向に結合する
+
+In [43]:np.r_['0, 2, -1', [0, 1, 2], [3, 3, 3]].shape
+
+In [44]:np.r_['0, 2, 0', [0, 1, 2], [3, 3, 3]] # (3,)→(3, 1)になってから、axis=0の方向に結合する
+
+In [45]:np.r_['0, 2, 0', [0, 1, 2], [3, 3, 3]].shape
+
+In [46]:np.r_['0, 3, 0', [0, 1, 2], [3, 3, 3]] # 3次元でも同様にできる。 例：(3,)→(3, 1, 1)
+
+In [47]:np.r_['0, 3, 0', [0, 1, 2], [3, 3, 3]].shape
+
+In [48]:a = np.array([1, 4, 6])
+
+In [49]:b = np.array([2, 2, 2])
+
+In [50]:np.r_['r', a, b]
+
+In [51]:np.r_['c', a, b] # 縦ベクトルになる
+
+In [52]:c = np.ones((4, 5))
+
+In [53]:d = np.zeros((2, 5))
+
+In [54]:np.r_['r', c, d] # 2次元行列
+
+In [55]:np.r_['c', c, d] # 'c'でも結果は同じ
+
+2.27.3 np.c_
+----------------------------------------
+In [56]:a = np.ones((3, 2))
+
+In [57]:b = np.zeros((3, 3))
+
+In [58]:a
+
+In [59]:b
+
+In [60]:np.c_[a, b]
+
+In [61]:c = np.zeros(3)
+
+In [62]:c
+
+In [63]:np.c_[a, c]
+
+In [64]:np.c_[a, c].shape
+
+In [65]:np.c_[[[1, 2, 3]], [[4, 5, 6]], 2, 3] # 数値のみとの結合も可能。前半の2つの配列が2次元配列にならないとできないことを注意する
